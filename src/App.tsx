@@ -23,7 +23,7 @@ import {
 import 'react-photo-view/dist/react-photo-view.css';
 
 // You can replace this with your actual birthday song URL
-const BIRTHDAY_SONG_URL = 'hbd.mp3';
+const BIRTHDAY_SONG_URL = 'https://soundcloud.com/ramesh-das-265698387/hbd?si=771c6787b81a452295d103714c67ed9a&utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing';
 
 const memories = [
   {
