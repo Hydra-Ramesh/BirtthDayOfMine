@@ -131,7 +131,12 @@ const messages = [
   },
 ];
 
-function CountdownTimer({ targetDate }: { targetDate: Date }) {
+
+interface CountdownTimerProps {
+  targetDate: Date;
+}
+
+const CountdownTimer: React.FC<CountdownTimerProps> = ({ targetDate }) => {
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
     hours: 0,
@@ -140,18 +145,32 @@ function CountdownTimer({ targetDate }: { targetDate: Date }) {
   });
 
   useEffect(() => {
+    // Initialize the timer and update every second
     const timer = setInterval(() => {
       const now = new Date().getTime();
       const distance = targetDate.getTime() - now;
 
-      setTimeLeft({
-        days: Math.floor(distance / (1000 * 60 * 60 * 24)),
-        hours: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
-        minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
-        seconds: Math.floor((distance % (1000 * 60)) / 1000),
-      });
+      // Check if the countdown is finished
+      if (distance <= 0) {
+        clearInterval(timer); // Stop the timer
+        setTimeLeft({
+          days: 0,
+          hours: 0,
+          minutes: 0,
+          seconds: 0,
+        });
+      } else {
+        // Update the timeLeft state with the remaining time
+        setTimeLeft({
+          days: Math.floor(distance / (1000 * 60 * 60 * 24)),
+          hours: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+          minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
+          seconds: Math.floor((distance % (1000 * 60)) / 1000),
+        });
+      }
     }, 1000);
 
+    // Cleanup interval on component unmount
     return () => clearInterval(timer);
   }, [targetDate]);
 
@@ -165,7 +184,8 @@ function CountdownTimer({ targetDate }: { targetDate: Date }) {
       ))}
     </div>
   );
-}
+};
+
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -287,7 +307,7 @@ function App() {
           <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-8">
             Counting Down to Your Special Day
           </h2>
-          <CountdownTimer targetDate={new Date('2025-01-17')} />
+          <CountdownTimer targetDate={new Date('2025-01-17T00:00:00')} />
         </div>
       </section>
 
